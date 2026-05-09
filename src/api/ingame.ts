@@ -1,6 +1,13 @@
 import { RELEASE_VERSION, DEBUG } from '../config/constant';
 import { encodeProtobuf, decodeProtobuf } from '../utils/protobuf';
 
+/**
+ * Searches for an account by name keyword.
+ * @param serverUrl The game server URL.
+ * @param authToken The authentication token.
+ * @param keyword The name or keyword to search for.
+ * @returns A promise that resolves to the search results.
+ */
 export async function searchAccountByKeyword(serverUrl: string, authToken: string, keyword: string) {
     const endpoint = `${serverUrl}/FuzzySearchAccountByName`;
     
@@ -45,6 +52,17 @@ export async function searchAccountByKeyword(serverUrl: string, authToken: strin
     }
 }
 
+/**
+ * Retrieves the personal show (profile) data for a player.
+ * @param serverUrl The game server URL.
+ * @param authorization The authentication token.
+ * @param accountId The player's account ID.
+ * @param needGalleryInfo Whether to include gallery info.
+ * @param callSignSrc The call sign source.
+ * @param needBlacklist Whether to include blacklist info.
+ * @param needSparkInfo Whether to include spark info.
+ * @returns A promise that resolves to the player's personal show data.
+ */
 export async function getPlayerPersonalShow(
     serverUrl: string, 
     authorization: string, 
@@ -96,6 +114,15 @@ export async function getPlayerPersonalShow(
     }
 }
 
+/**
+ * Retrieves game statistics for a player.
+ * @param authorization The authentication token.
+ * @param serverUrl The game server URL.
+ * @param mode The game mode ('br' or 'cs').
+ * @param uid The player's UID.
+ * @param matchType The type of match ('CAREER', 'NORMAL', 'RANKED').
+ * @returns A promise that resolves to the player's statistics.
+ */
 export async function getPlayerStats(
     authorization: string, 
     serverUrl: string, 

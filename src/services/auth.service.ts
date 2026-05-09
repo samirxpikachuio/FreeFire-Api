@@ -11,7 +11,16 @@ import {
 import { encodeProtobuf, decodeProtobuf } from '../utils/protobuf';
 import accounts from '../config/AccountConfiguration.json' with { type: "json" };
 
+/**
+ * for handling Garena and game session authentication.
+ */
 export class AuthService {
+    /**
+     * Authenticates with Garena using UID and password to get an access token.
+     * @param uid The user's Garena UID.
+     * @param pass The user's Garena password.
+     * @returns A access token and open ID, or null if authentication fails.
+     */
     static async authenticateGarena(uid: string, pass: string): Promise<{ accessToken: string; openId: string } | null> {
         const url = GARENA_AUTH_URL;
         
@@ -52,6 +61,12 @@ export class AuthService {
         }
     }
 
+    /**
+     * Gets a game session token using a Garena access token and open ID.
+     * @param accessToken The Garena access token.
+     * @param openId The Garena open ID.
+     * @returns A session token 
+     */
     static async getSessionToken(accessToken: string, openId: string): Promise<{ token: string; serverUrl: string } | null> {
         const encryptedPayload = await encodeProtobuf({
             openid: openId,
@@ -91,7 +106,12 @@ export class AuthService {
         }
     }
 
-    static async loginForRegion(region: string): Promise<{ token: string; serverUrl: string }> {
+    /**
+     * for a specific region using pre-configured accounts.
+     * @param region The region to log in for (e.g., 'BD', 'IND').
+     * @returns A session   token and server url.
+     */
+  static async loginForRegion(region: string): Promise<{ token: string; serverUrl: string }> {
         const account = (accounts as any)[region.toUpperCase()];
         if (!account) throw new Error(`Unsupported region: ${region}`);
 

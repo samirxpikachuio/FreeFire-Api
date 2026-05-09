@@ -1,6 +1,12 @@
 import { RELEASE_VERSION, DEBUG } from '../config/constant';
 import { encodeProtobuf, decodeProtobuf } from '../utils/protobuf';
 
+/**
+ * Fetches a Garena access token using UID and password.
+ * @param uid The Garena UID.
+ * @param password The Garena password.
+ * @returns A promise that resolves to the Garena authentication data.
+ */
 export async function getGarenaToken(uid: string, password: string) {
     const url = "https://ffmconnect.live.gop.garenanow.com/oauth/guest/token/grant";
     
@@ -39,6 +45,12 @@ export async function getGarenaToken(uid: string, password: string) {
     }
 }
 
+/**
+ * Performs a major login to get a game session token.
+ * @param logintoken The Garena access token.
+ * @param openid The Garena open ID.
+ * @returns A promise that resolves to the decoded session response.
+ */
 export async function getMajorLogin(logintoken: string, openid: string) { 
     const encryptedPayload = await encodeProtobuf({
         openid,

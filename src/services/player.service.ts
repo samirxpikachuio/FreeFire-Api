@@ -1,6 +1,9 @@
 import { RELEASE_VERSION, DEBUG, GAME_USER_AGENT, UNITY_USER_AGENT } from '../config/constant';
 import { encodeProtobuf, decodeProtobuf } from '../utils/protobuf';
 
+/**
+ * Service for retrieving player-related data from the game servers.
+ */
 export class PlayerService {
     private static COMMON_HEADERS = {
         "User-Agent": GAME_USER_AGENT,
@@ -11,6 +14,13 @@ export class PlayerService {
         "Content-Type": "application/x-www-form-urlencoded",
     };
 
+    /**
+     * Searches for players by their in-game name.
+     * @param serverUrl The game server URL.
+     * @param token The session token.
+     * @param keyword The name or keyword to search for.
+     * @returns A promise that resolves to the search results.
+     */
     static async searchPlayers(serverUrl: string, token: string, keyword: string): Promise<any> {
         const endpoint = `${serverUrl}/FuzzySearchAccountByName`;
         
@@ -39,14 +49,26 @@ export class PlayerService {
         }
     }
 
+    /**
+     * Retrieves the profile information for a specific player.
+     * @param serverUrl The game server URL.
+     * @param token The session token.
+     * @param uid The player's unique ID.
+     * @param options Additional options for the profile request.
+     * @returns A promise that resolves to the player's profile data.
+     */
     static async getPlayerProfile(
         serverUrl: string, 
         token: string, 
         uid: number, 
         options: {
+            /** Whether to include gallery information. */
             gallery?: boolean;
+            /** Whether to include blacklist information. */
             blacklist?: boolean;
+            /** Whether to include spark information. */
             sparkInfo?: boolean;
+            /** The call sign source. */
             callSignSrc?: number;
         } = {}
     ): Promise<any> {
@@ -86,6 +108,15 @@ export class PlayerService {
         }
     }
 
+    /**
+     * Retrieves game statistics for a specific player.
+     * @param serverUrl The game server URL.
+     * @param token The session token.
+     * @param uid The player's unique ID.
+     * @param mode The game mode ('br' for Battle Royale, 'cs' for Clash Squad).
+     * @param matchType The type of match ('CAREER', 'NORMAL', 'RANKED').
+     * @returns A promise that resolves to the player's statistics.
+     */
     static async getPlayerStatistics(
         serverUrl: string,
         token: string, 

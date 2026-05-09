@@ -3,6 +3,9 @@ import { AuthService } from '../services/auth.service';
 import { PlayerService } from '../services/player.service';
 import { DEFAULT_REGION } from '../config/constant';
 
+/**
+ * Elysia routes for player-related endpoints.
+ */
 export const playerRoutes: Elysia<any, any, any, any, any, any, any, any> = new Elysia({ prefix: '/player' })
     .get('/search', async ({ query, set }) => {
         const { server = DEFAULT_REGION, keyword } = query;
