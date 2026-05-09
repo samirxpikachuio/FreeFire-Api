@@ -9,7 +9,7 @@ import {
     GAME_USER_AGENT
 } from '../config/constant';
 import { encodeProtobuf, decodeProtobuf } from '../utils/protobuf';
-import accounts from '../config/AccountConfiguration.json';
+import accounts from '../config/AccountConfiguration.json' with { type: "json" };
 
 export class AuthService {
     static async authenticateGarena(uid: string, pass: string) {

@@ -1,4 +1,4 @@
-import { RELEASE_VERSION, DEBUG } from '../config/api';
+import { RELEASE_VERSION, DEBUG } from '../config/constant';
 import { encodeProtobuf, decodeProtobuf } from '../utils/protobuf';
 
 export async function searchAccountByKeyword(serverUrl: string, authToken: string, keyword: string) {
