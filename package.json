@@ -6,7 +6,7 @@
   "module": "src/index.ts",
   "type": "module",
   "bin": {
-    "freefire-api": "./bin/cli.ts"
+    "freefire-api": "bin/cli.ts"
   },
   "scripts": {
     "start": "bun run src/server.ts",
