@@ -15,7 +15,7 @@ import { playerRoutes } from './routes/player.routes';
  * @param port The port to listen on (default: 5000).
  * @returns The configured Elysia server instance.
  */
-export const createServer = (port: number = 5000): Elysia => {
+export const createServer = (port: number = 5000) => {
     return new Elysia()
         .use(cors())
         .group('/api', (app) => app.use(playerRoutes))
