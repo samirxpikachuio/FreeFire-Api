@@ -1,7 +1,10 @@
 {
-  "name": "freefire-api",
-  "version": "2.0.0",
-  "description": "A high-performance FreeFire API library and proxy server",
+  "name": "@samir.oe70/freefire-api",
+  "version": "2.0.4",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": " FreeFire API library and proxy server",
   "main": "src/index.ts",
   "module": "src/index.ts",
   "type": "module",
