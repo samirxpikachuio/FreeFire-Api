@@ -26,12 +26,10 @@ jobs:
         
       - name: Commit changes
         run: |
-           git config user.name "GitHub Actions"
-           git config user.email "actions@github.com"
-           git add bun.lockb
-           git add package.json
-           git add jsr.json
-           git commit -m "Commit lock file"
-
+             git config user.name "GitHub Actions"
+             git config user.email "actions@github.com"
+             git add bun.lockb package.json jsr.json 2>/dev/null || true
+             git diff --cached --quiet || git commit -m "Commit lock file"
+             
       - name: Publish to JSR
         run: bun x jsr publish
