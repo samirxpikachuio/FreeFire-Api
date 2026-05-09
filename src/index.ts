@@ -10,7 +10,7 @@ import { Elysia } from 'elysia';
 import { cors } from '@elysiajs/cors';
 import { playerRoutes } from './routes/player.routes';
 
-export const createServer = (port: number = 5000) => {
+export const createServer = (port: number = 5000): Elysia => {
     return new Elysia()
         .use(cors())
         .group('/api', (app) => app.use(playerRoutes))

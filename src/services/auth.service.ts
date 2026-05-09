@@ -12,7 +12,7 @@ import { encodeProtobuf, decodeProtobuf } from '../utils/protobuf';
 import accounts from '../config/AccountConfiguration.json' with { type: "json" };
 
 export class AuthService {
-    static async authenticateGarena(uid: string, pass: string) {
+    static async authenticateGarena(uid: string, pass: string): Promise<{ accessToken: string; openId: string } | null> {
         const url = GARENA_AUTH_URL;
         
         const body = new URLSearchParams({
@@ -52,7 +52,7 @@ export class AuthService {
         }
     }
 
-    static async getSessionToken(accessToken: string, openId: string) {
+    static async getSessionToken(accessToken: string, openId: string): Promise<{ token: string; serverUrl: string } | null> {
         const encryptedPayload = await encodeProtobuf({
             openid: openId,
             logintoken: accessToken,
@@ -91,7 +91,7 @@ export class AuthService {
         }
     }
 
-    static async loginForRegion(region: string) {
+    static async loginForRegion(region: string): Promise<{ token: string; serverUrl: string }> {
         const account = (accounts as any)[region.toUpperCase()];
         if (!account) throw new Error(`Unsupported region: ${region}`);
 

@@ -11,7 +11,7 @@ export class PlayerService {
         "Content-Type": "application/x-www-form-urlencoded",
     };
 
-    static async searchPlayers(serverUrl: string, token: string, keyword: string) {
+    static async searchPlayers(serverUrl: string, token: string, keyword: string): Promise<any> {
         const endpoint = `${serverUrl}/FuzzySearchAccountByName`;
         
         try {
@@ -49,7 +49,7 @@ export class PlayerService {
             sparkInfo?: boolean;
             callSignSrc?: number;
         } = {}
-    ) {
+    ): Promise<any> {
         const url = `${serverUrl}/GetPlayerPersonalShow`;
 
         try {
@@ -92,7 +92,7 @@ export class PlayerService {
         uid: number,
         mode: 'br' | 'cs' = 'br', 
         matchType: 'CAREER' | 'NORMAL' | 'RANKED' = 'CAREER'
-    ) {
+    ): Promise<any> {
         let url: string;
         let protoFile: string;
         let typeValue: number = 0;
