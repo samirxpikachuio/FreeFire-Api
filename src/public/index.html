@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FreeFire API Hub</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+:root{
+    --bg:#07090f;
+    --panel:#0f131c;
+    --panel-2:#121826;
+    --border:#1b2333;
+    --soft:#94a3b8;
+    --text:#f8fafc;
+    --primary:#7c3aed;
+    --primary-2:#8b5cf6;
+    --success:#22c55e;
+    --danger:#ef4444;
+
+    --radius:24px;
+    --radius-sm:18px;
+
+    --shadow:
+        0 10px 40px rgba(0,0,0,.45),
+        inset 0 1px 0 rgba(255,255,255,.03);
+
+    --transition:.25s cubic-bezier(.4,0,.2,1);
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
+}
+
+body{
+    font-family:"Inter",sans-serif;
+    background:
+        radial-gradient(circle at top left, rgba(124,58,237,.14), transparent 30%),
+        radial-gradient(circle at bottom right, rgba(139,92,246,.10), transparent 25%),
+        var(--bg);
+    color:var(--text);
+    min-height:100vh;
+    overflow-x:hidden;
+}
+
+/* subtle grid */
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background-image:
+        linear-gradient(rgba(255,255,255,.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px);
+    background-size:40px 40px;
+    mask-image: radial-gradient(circle at center, black 35%, transparent 90%);
+    pointer-events:none;
+}
+
+.app{
+    width:min(1100px,92%);
+    margin:auto;
+    padding:40px 0 70px;
+}
+
+/* HEADER */
+
+.topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:40px;
+    gap:20px;
+    flex-wrap:wrap;
+}
+
+.brand h1{
+    font-size:clamp(2.2rem,5vw,4rem);
+    font-weight:800;
+    letter-spacing:-3px;
+    line-height:1;
+}
+
+.brand h1 span{
+    color:var(--primary-2);
+}
+
+.brand p{
+    color:var(--soft);
+    margin-top:10px;
+    font-size:.96rem;
+}
+
+.status-pill{
+    padding:12px 18px;
+    border-radius:999px;
+    background:rgba(34,197,94,.08);
+    border:1px solid rgba(34,197,94,.18);
+    color:#86efac;
+    font-size:.9rem;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    backdrop-filter:blur(10px);
+}
+
+.status-dot{
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    background:var(--success);
+    box-shadow:0 0 12px var(--success);
+}
+
+/* NAV */
+
+.nav{
+    display:flex;
+    gap:12px;
+    background:rgba(255,255,255,.03);
+    border:1px solid var(--border);
+    padding:10px;
+    border-radius:22px;
+    width:fit-content;
+    backdrop-filter:blur(14px);
+    margin-bottom:30px;
+    position:sticky;
+    top:18px;
+    z-index:50;
+}
+
+.nav button{
+    border:none;
+    background:transparent;
+    color:var(--soft);
+    padding:14px 22px;
+    border-radius:16px;
+    font-weight:600;
+    cursor:pointer;
+    transition:var(--transition);
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:.95rem;
+}
+
+.nav button:hover{
+    background:rgba(255,255,255,.04);
+    color:var(--text);
+}
+
+.nav button.active{
+    background:linear-gradient(135deg,var(--primary),var(--primary-2));
+    color:white;
+    box-shadow:
+        0 10px 30px rgba(124,58,237,.35),
+        inset 0 1px 0 rgba(255,255,255,.15);
+}
+
+/* PANELS */
+
+.panel{
+    display:none;
+    animation:fade .35s ease;
+}
+
+.panel.active{
+    display:block;
+}
+
+@keyframes fade{
+    from{
+        opacity:0;
+        transform:translateY(12px);
+    }
+    to{
+        opacity:1;
+        transform:none;
+    }
+}
+
+/* CARD */
+
+.card{
+    background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:28px;
+    box-shadow:var(--shadow);
+    backdrop-filter:blur(20px);
+}
+
+/* FORM */
+
+.form-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:18px;
+}
+
+.field{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+label{
+    font-size:.78rem;
+    color:#64748b;
+    font-weight:700;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+}
+
+.input{
+    height:58px;
+    border-radius:18px;
+    border:1px solid var(--border);
+    background:var(--panel);
+    color:var(--text);
+    padding:0 18px;
+    outline:none;
+    transition:var(--transition);
+    font-size:.97rem;
+    font-weight:500;
+}
+
+.input:focus{
+    border-color:rgba(139,92,246,.6);
+    box-shadow:0 0 0 4px rgba(124,58,237,.12);
+    background:#111827;
+}
+
+select.input{
+    appearance:none;
+    cursor:pointer;
+}
+
+.action{
+    margin-top:22px;
+    display:flex;
+    justify-content:flex-end;
+}
+
+.primary-btn{
+    border:none;
+    background:linear-gradient(135deg,var(--primary),var(--primary-2));
+    color:white;
+    height:56px;
+    padding:0 26px;
+    border-radius:18px;
+    font-weight:700;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    transition:var(--transition);
+    box-shadow:0 12px 30px rgba(124,58,237,.3);
+}
+
+.primary-btn:hover{
+    transform:translateY(-2px);
+    filter:brightness(1.06);
+}
+
+/* SEARCH RESULTS */
+
+.results{
+    margin-top:24px;
+    display:grid;
+    gap:16px;
+}
+
+.player{
+    display:flex;
+    align-items:center;
+    gap:18px;
+    padding:20px;
+    background:rgba(255,255,255,.025);
+    border:1px solid var(--border);
+    border-radius:22px;
+    transition:var(--transition);
+}
+
+.player:hover{
+    transform:translateY(-3px);
+    border-color:rgba(139,92,246,.35);
+    background:rgba(255,255,255,.04);
+}
+
+.avatar{
+    width:62px;
+    height:62px;
+    border-radius:20px;
+    background:linear-gradient(135deg,var(--primary),#4f46e5);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:800;
+    font-size:1.1rem;
+    flex-shrink:0;
+}
+
+.player-info{
+    flex:1;
+}
+
+.player-name{
+    font-size:1.08rem;
+    font-weight:700;
+}
+
+.player-meta{
+    margin-top:5px;
+    color:var(--soft);
+    font-size:.9rem;
+}
+
+.actions{
+    display:flex;
+    gap:10px;
+}
+
+.icon-btn{
+    width:48px;
+    height:48px;
+    border-radius:16px;
+    border:1px solid var(--border);
+    background:rgba(255,255,255,.03);
+    color:white;
+    cursor:pointer;
+    transition:var(--transition);
+}
+
+.icon-btn:hover{
+    background:var(--primary);
+    border-color:transparent;
+    transform:translateY(-2px);
+}
+
+/* STATS */
+
+.stats-wrap{
+    margin-top:24px;
+}
+
+.stats-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:26px;
+    gap:20px;
+    flex-wrap:wrap;
+}
+
+.stats-title h2{
+    font-size:2rem;
+    font-weight:800;
+}
+
+.stats-title p{
+    margin-top:6px;
+    color:var(--soft);
+}
+
+.mode-badge{
+    background:rgba(124,58,237,.12);
+    border:1px solid rgba(124,58,237,.22);
+    color:#c4b5fd;
+    padding:14px 18px;
+    border-radius:18px;
+    font-weight:700;
+}
+
+.stats-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:16px;
+}
+
+.stat{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:22px;
+    padding:24px;
+    transition:var(--transition);
+}
+
+.stat:hover{
+    border-color:rgba(139,92,246,.28);
+    transform:translateY(-3px);
+}
+
+.stat-value{
+    font-size:2rem;
+    font-weight:800;
+    margin-bottom:8px;
+}
+
+.stat-label{
+    color:var(--soft);
+    font-size:.85rem;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+}
+
+/* PROFILE */
+
+.profile-top{
+    display:flex;
+    align-items:center;
+    gap:24px;
+    margin-bottom:30px;
+    flex-wrap:wrap;
+}
+
+.big-avatar{
+    width:110px;
+    height:110px;
+    border-radius:30px;
+    background:linear-gradient(135deg,var(--primary),#4f46e5);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:2.2rem;
+    font-weight:800;
+}
+
+.profile-name{
+    font-size:2.4rem;
+    font-weight:800;
+    letter-spacing:-1px;
+}
+
+.tags{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:12px;
+}
+
+.tag{
+    padding:8px 14px;
+    border-radius:999px;
+    background:rgba(255,255,255,.05);
+    border:1px solid var(--border);
+    color:#cbd5e1;
+    font-size:.85rem;
+    font-weight:600;
+}
+
+.bio-box{
+    margin-top:24px;
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:22px;
+    padding:24px;
+}
+
+.bio-box small{
+    color:#64748b;
+    text-transform:uppercase;
+    letter-spacing:.12em;
+    font-weight:700;
+}
+
+.bio-box p{
+    margin-top:14px;
+    color:#e2e8f0;
+    line-height:1.7;
+    font-size:1.02rem;
+}
+
+/* LOADER */
+
+.loader{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.7);
+    backdrop-filter:blur(10px);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:999;
+}
+
+.loader-box{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:18px;
+}
+
+.spinner{
+    width:56px;
+    height:56px;
+    border-radius:50%;
+    border:4px solid rgba(255,255,255,.08);
+    border-top-color:var(--primary-2);
+    animation:spin .8s linear infinite;
+}
+
+@keyframes spin{
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+.loader p{
+    color:#94a3b8;
+    font-weight:600;
+}
+
+/* MOBILE */
+
+@media(max-width:700px){
+
+    .app{
+        width:94%;
+        padding-top:26px;
+    }
+
+    .nav{
+        width:100%;
+        overflow:auto;
+    }
+
+    .nav button{
+        white-space:nowrap;
+        flex:1;
+        justify-content:center;
+    }
+
+    .card{
+        padding:20px;
+    }
+
+    .profile-name{
+        font-size:2rem;
+    }
+
+    .stats-title h2{
+        font-size:1.5rem;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="loader" id="global-loader">
+    <div class="loader-box">
+        <div class="spinner"></div>
+        <p>Syncing with battlefield servers...</p>
+    </div>
+</div>
+
+<div class="app">
+
+    <div class="topbar">
+        <div class="brand">
+            <h1>FreeFire <span>Hub</span></h1>
+            <p>Minimal API dashboard for player search stats and profile lookup</p>
+        </div>
+
+        <div class="status-pill">
+            <div class="status-dot"></div>
+            API Online
+        </div>
+    </div>
+
+    <div class="nav">
+        <button class="active" onclick="switchTab('search', this)">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            Search
+        </button>
+
+        <button onclick="switchTab('stats', this)">
+            <i class="fa-solid fa-chart-simple"></i>
+            Stats
+        </button>
+
+        <button onclick="switchTab('profile', this)">
+            <i class="fa-solid fa-user"></i>
+            Profile
+        </button>
+    </div>
+
+    <!-- SEARCH -->
+    <div class="panel active" id="panel-search">
+        <div class="card">
+
+            <div class="form-grid">
+                <div class="field">
+                    <label>Region</label>
+                    <select id="search-region" class="input">
+                        <option value="BD">Bangladesh</option>
+                        <option value="IND">India</option>
+                        <option value="SG">Singapore</option>
+                    </select>
+                </div>
+
+                <div class="field" style="grid-column:span 2;">
+                    <label>Player Name</label>
+                    <input
+                        type="text"
+                        id="search-keyword"
+                        class="input"
+                        placeholder="Search player..."
+                        onkeypress="if(event.key==='Enter') runSearch()"
+                    >
+                </div>
+            </div>
+
+            <div class="action">
+                <button class="primary-btn" onclick="runSearch()">
+                    <i class="fa-solid fa-bolt"></i>
+                    Search Player
+                </button>
+            </div>
+
+        </div>
+
+        <div class="results" id="search-results"></div>
+    </div>
+
+    <!-- STATS -->
+    <div class="panel" id="panel-stats">
+
+        <div class="card">
+
+            <div class="form-grid">
+                <div class="field">
+                    <label>Region</label>
+                    <select id="stats-region" class="input">
+                        <option value="BD">Bangladesh</option>
+                        <option value="IND">India</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label>UID</label>
+                    <input
+                        type="number"
+                        id="stats-uid"
+                        class="input"
+                        placeholder="Player UID"
+                    >
+                </div>
+
+                <div class="field">
+                    <label>Mode</label>
+                    <select id="stats-mode" class="input">
+                        <option value="br">Battle Royale</option>
+                        <option value="cs">Clash Squad</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="action">
+                <button class="primary-btn" onclick="runStats()">
+                    <i class="fa-solid fa-chart-line"></i>
+                    Fetch Stats
+                </button>
+            </div>
+
+        </div>
+
+        <div class="stats-wrap" id="stats-results"></div>
+    </div>
+
+    <!-- PROFILE -->
+    <div class="panel" id="panel-profile">
+
+        <div class="card">
+
+            <div class="form-grid">
+                <div class="field">
+                    <label>Region</label>
+                    <select id="profile-region" class="input">
+                        <option value="BD">Bangladesh</option>
+                        <option value="IND">India</option>
+                    </select>
+                </div>
+
+                <div class="field" style="grid-column:span 2;">
+                    <label>UID</label>
+                    <input
+                        type="number"
+                        id="profile-uid"
+                        class="input"
+                        placeholder="Player UID"
+                    >
+                </div>
+            </div>
+
+            <div class="action">
+                <button class="primary-btn" onclick="runProfile()">
+                    <i class="fa-solid fa-id-card"></i>
+                    Open Profile
+                </button>
+            </div>
+
+        </div>
+
+        <div class="stats-wrap" id="profile-results"></div>
+    </div>
+
+</div>
+
+<script>
+const API_URL = window.location.origin + '/api/player';
+
+function switchTab(tab, el){
+    document.querySelectorAll('.nav button')
+        .forEach(btn => btn.classList.remove('active'));
+
+    document.querySelectorAll('.panel')
+        .forEach(panel => panel.classList.remove('active'));
+
+    el.classList.add('active');
+    document.getElementById(`panel-${tab}`).classList.add('active');
+}
+
+function showLoader(show){
+    document.getElementById('global-loader').style.display =
+        show ? 'flex' : 'none';
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,27 @@
+{
+  "name": "freefire-api",
+  "version": "2.0.0",
+  "description": "A high-performance FreeFire API library and proxy server",
+  "main": "src/index.ts",
+  "module": "src/index.ts",
+  "type": "module",
+  "bin": {
+    "freefire-api": "./bin/cli.ts"
+  },
+  "scripts": {
+    "start": "bun run src/server.ts",
+    "dev": "bun --watch run src/server.ts",
+    "cli": "bun run bin/cli.ts"
+  },
+  "dependencies": {
+    "@elysiajs/cors": "^1.4.2",
+    "elysia": "^1.4.28",
+    "protobufjs": "^8.0.3"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}
